@@ -1,15 +1,25 @@
 import CpfValidation from "./CpfValidation";
+import StudentRepository from "./StudentRepository";
+import Student from "./Student";
+import EnrollmentRequest from "./EnrollmentRequest";
 
 export default class EnrollStudent {
 
-    execute(enrollmentRequest: any) {
-        this.validateRequest(enrollmentRequest);
+    private studentRepository: StudentRepository;
 
+    constructor() {
+        this.studentRepository = new StudentRepository();
+    }
+
+    execute(enrollmentRequest: EnrollmentRequest) {
+        this.validateRequest(enrollmentRequest);
+        this.enroll(enrollmentRequest.student);
     }
 
     validateRequest(enrollmentRequest: any) {
         this.validateName(enrollmentRequest.student.name);
         this.validateCpf(enrollmentRequest.student.cpf);
+        this.validateUnique(enrollmentRequest.student);
     }
 
     private validateName(name: string) {
@@ -19,8 +29,18 @@ export default class EnrollStudent {
     }
 
     private validateCpf(cpf: string) {
-        if(!CpfValidation.execute(cpf)){
+        if (!CpfValidation.execute(cpf)) {
             throw new Error("Cpf do estudante invalido!");
         }
+    }
+
+    private validateUnique(student: Student) {
+        if (this.studentRepository.findByCpf(student.cpf)) {
+            throw new Error("Não deve matricular um aluno duplicado");
+        }
+    }
+
+    private enroll(student: Student) {
+        this.studentRepository.persist(student);
     }
 }
