@@ -11,4 +11,8 @@ export default class StudentRepository {
     findByCpf(cpf: string): Student | undefined {
         return this.students.find((student) => student.cpf === cpf);
     }
+
+    getNextSequence(): string {
+        return (this.students.length + 1).toString().padStart(4, "0");
+    }
 }
