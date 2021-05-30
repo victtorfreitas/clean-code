@@ -3,7 +3,6 @@ import Student from "./Student";
 export default class StudentRepository {
     private students: Student[] = []
 
-
     persist(student: Student) {
         this.students.push(student);
     }
