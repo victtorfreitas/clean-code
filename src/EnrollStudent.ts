@@ -11,9 +11,11 @@ export default class EnrollStudent {
         this.studentRepository = new StudentRepository();
     }
 
-    execute(enrollmentRequest: EnrollmentRequest) {
+    execute(enrollmentRequest: EnrollmentRequest): string {
         this.validateRequest(enrollmentRequest);
-        this.enroll(enrollmentRequest.student);
+        this.enroll(enrollmentRequest);
+
+        return enrollmentRequest.student.enrollNumber;
     }
 
     validateRequest(enrollmentRequest: any) {
@@ -40,7 +42,10 @@ export default class EnrollStudent {
         }
     }
 
-    private enroll(student: Student) {
+    private enroll(enrollmentRequest: EnrollmentRequest) {
+        const student = enrollmentRequest.student;
+        student.enrollNumber = enrollmentRequest.generetedEnrollNumber(this.studentRepository.getNextSequence());
+
         this.studentRepository.persist(student);
     }
 }
