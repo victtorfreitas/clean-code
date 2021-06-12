@@ -1,4 +1,4 @@
-import EnrollmentRequest from "../model/EnrollmentRequest";
+import EnrollStudent from "../model/EnrollStudent";
 import DateUtil from "../util/Date.util";
 import ModuleRepositoryMemory from "../repository/ModuleRepositoryMemory";
 import ClassroomRepositoryMemory from "../repository/ClassroomRepositoryMemory";
@@ -13,7 +13,7 @@ export default class EnrollmentRequestValidation {
         this.classroomRepositoryMemory = new ClassroomRepositoryMemory();
     }
 
-    execute(enrollRequest: EnrollmentRequest) {
+    execute(enrollRequest: EnrollStudent) {
         const student = enrollRequest.student;
         this.validateMinAge(student.birthDate, enrollRequest.module, enrollRequest.level);
         this.validateCapacity(enrollRequest.classe);

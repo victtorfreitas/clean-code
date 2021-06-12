@@ -1,12 +1,12 @@
 import Student from "../model/Student";
 import CpfValidation from "./Cpf.validation";
-import StudentRepositoryMemory from "../repository/StudentRepositoryMemory";
+import EnrollStudentRepositoryMemory from "../repository/EnrollStudentRepositoryMemory";
 
 export class StudentValidation {
 
-    private studentRepository: StudentRepositoryMemory;
+    private studentRepository: EnrollStudentRepositoryMemory;
 
-    constructor(studentRepository: StudentRepositoryMemory) {
+    constructor(studentRepository: EnrollStudentRepositoryMemory) {
         this.studentRepository = studentRepository;
     }
 

@@ -1,4 +1,4 @@
-import Student from "./Student";
+import Student from "../model/Student";
 
 export default class EnrollmentRequest {
     student: Student;
@@ -11,10 +11,5 @@ export default class EnrollmentRequest {
         this.level = level;
         this.module = module;
         this.classe = clasz;
-    }
-
-    public generetedEnrollNumber = (sequence: string): string => {
-        const currentYear = new Date().getFullYear();
-        return `${currentYear}${this.level}${this.module}${this.classe}${sequence}`
     }
 }

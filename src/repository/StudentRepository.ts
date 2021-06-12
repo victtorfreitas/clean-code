@@ -1,7 +1,7 @@
-import Student from "../model/Student";
+import EnrollStudent from "../model/EnrollStudent";
 
 export default interface StudentRepository {
-    persist(student: Student): void;
+    persist(enrollStudent: EnrollStudent): void;
 
     existByCpf(cpf: string): boolean;
 

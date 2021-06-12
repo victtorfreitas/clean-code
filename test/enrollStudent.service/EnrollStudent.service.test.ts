@@ -1,23 +1,24 @@
 import EnrollStudentService from "../../src/service/EnrollStudent.service";
-import EnrollmentRequest from "../../src/model/EnrollmentRequest";
 import Student from "../../src/model/Student";
 import {data} from "../../src/Data";
 import ModuleRepositoryMemory from "../../src/repository/ModuleRepositoryMemory";
 import Module from "../../src/model/Module";
+import EnrollmentRequest from "../../src/dto/EnrollmentRequest";
+import DataBase from "../../src/repository/dataMemory/DataBase";
 
-const LEVEL = data.levels[1];
 const CLASSROOM = data.classes[0];
 
 const moduleRepository = new ModuleRepositoryMemory();
 let enrollStudentService: EnrollStudentService;
 
 beforeEach(() => {
+    DataBase.resetDataBase();
     enrollStudentService = new EnrollStudentService();
 })
 
 test("Não deve matricular sem um nome de estudante válido", () => {
         let student = new Student("Ana", "027.297.121-94", new Date(1995, 11, 26));
-        const anyModule = getAnyModule();
+        const anyModule = getModuleWithClassroom();
 
         const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
 
@@ -28,7 +29,7 @@ test("Não deve matricular sem um nome de estudante válido", () => {
 
 test("Não deve matricular sem um cpf de estudante válido", () => {
     let student = new Student("Ana Clara", "027.297.121-00", new Date(1995, 11, 26));
-    const anyModule = getAnyModule();
+    const anyModule = getModuleWithClassroom();
 
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
 
@@ -38,7 +39,7 @@ test("Não deve matricular sem um cpf de estudante válido", () => {
 
 test("Não deve matricular um aluno duplicado", () => {
     const student = new Student("Ana Clara", "027.297.121-94", new Date(1995, 11, 26));
-    const anyModule = getAnyModule();
+    const anyModule = getModuleWithClassroom();
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
 
     enrollStudentService.execute(enrollmentRequest);
@@ -48,19 +49,19 @@ test("Não deve matricular um aluno duplicado", () => {
 
 test("Deve gerar o código de matrícula", () => {
     const student = new Student("Ana Clara", "027.297.121-94", new Date(1995, 11, 26));
-    const anyModule = getAnyModule();
+    const module = getModuleWithClassroom();
 
-    const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
+    const enrollmentRequest = new EnrollmentRequest(student, module.level, module.code, CLASSROOM.code);
 
     const enrollNumber = enrollStudentService.execute(enrollmentRequest);
-    const expectEnrollNumber = enrollmentRequest.generetedEnrollNumber(getSequenceNumber());
+    const expectEnrollNumber = `2021${module.level}${module.code}A0001`;
 
     expect(enrollNumber).toEqual(expectEnrollNumber);
 });
 
 test("Não deve matricular aluno abaixo da idade mínima", () => {
     const student = new Student("Ana Clara", "027.297.121-94", new Date());
-    const anyModule = getAnyModule();
+    const anyModule = getModuleWithClassroom();
 
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
 
@@ -70,14 +71,14 @@ test("Não deve matricular aluno abaixo da idade mínima", () => {
 
 test("Não deve matricular aluno fora da capacidade da turma", () => {
     getValideStudents().forEach((student) => {
-        const anyModule = getAnyModule();
+        const anyModule = getModuleWithClassroom();
         const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
         enrollStudentService.execute(enrollmentRequest);
     })
 
     const student = new Student("Ana Carol", "339.605.820-80", new Date(1995, 11, 26));
 
-    const anyModule = getAnyModule();
+    const anyModule = getModuleWithClassroom();
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
 
     expect(() => enrollStudentService.execute(enrollmentRequest))
@@ -91,8 +92,8 @@ const getValideStudents = (): Student[] => {
     ]
 }
 
-const getAnyModule = (): Module => {
-    return moduleRepository.findAny();
+const getModuleWithClassroom = (): Module => {
+    return moduleRepository.findByCodeAndLevel("1","EM");
 }
 
 const getSequenceNumber = () => {
