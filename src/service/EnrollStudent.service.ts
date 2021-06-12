@@ -1,16 +1,16 @@
-import StudentRepository from "../repository/Student.repository";
+import StudentRepositoryMemory from "../repository/StudentRepositoryMemory";
 import EnrollmentRequest from "../model/EnrollmentRequest";
 import {StudentValidation} from "../validation/Student.validation";
 import EnrollmentRequestValidation from "../validation/EnrollmentRequest.validation";
 
 export default class EnrollStudentService {
 
-    private studentRepository: StudentRepository;
+    private studentRepository: StudentRepositoryMemory;
     private studentValidation: StudentValidation;
     private enrollmentRequestValidation: EnrollmentRequestValidation;
 
     constructor() {
-        this.studentRepository = new StudentRepository();
+        this.studentRepository = new StudentRepositoryMemory();
         this.studentValidation = new StudentValidation(this.studentRepository);
         this.enrollmentRequestValidation = new EnrollmentRequestValidation();
     }

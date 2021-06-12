@@ -1,14 +1,15 @@
 import Student from "../model/Student";
+import StudentRepository from "./StudentRepository";
 
-export default class StudentRepository {
+export default class StudentRepositoryMemory implements StudentRepository {
     private students: Student[] = []
 
     persist(student: Student) {
         this.students.push(student);
     }
 
-    findByCpf(cpf: string): Student | undefined {
-        return this.students.find((student) => student.cpf === cpf);
+    existByCpf(cpf: string): boolean {
+        return this.students.some((student) => student.cpf === cpf);
     }
 
     getNextSequence(): string {

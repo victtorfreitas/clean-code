@@ -1,12 +1,12 @@
 import Student from "../model/Student";
 import CpfValidation from "./Cpf.validation";
-import StudentRepository from "../repository/Student.repository";
+import StudentRepositoryMemory from "../repository/StudentRepositoryMemory";
 
 export class StudentValidation {
 
-    private studentRepository: StudentRepository;
+    private studentRepository: StudentRepositoryMemory;
 
-    constructor(studentRepository: StudentRepository) {
+    constructor(studentRepository: StudentRepositoryMemory) {
         this.studentRepository = studentRepository;
     }
 
@@ -30,7 +30,7 @@ export class StudentValidation {
     }
 
     private validateUnique(cpf: string) {
-        if (this.studentRepository.findByCpf(cpf)) {
+        if (this.studentRepository.existByCpf(cpf)) {
             throw new Error("Não deve matricular um aluno duplicado");
         }
     }

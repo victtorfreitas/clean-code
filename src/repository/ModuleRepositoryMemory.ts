@@ -1,6 +1,7 @@
 import Module from "../model/Module";
+import ModuleRepository from "./ModuleRepository";
 
-export default class ModuleRepository {
+export default class ModuleRepositoryMemory implements ModuleRepository {
     private module!: Module[];
 
 
@@ -8,18 +9,22 @@ export default class ModuleRepository {
         this.loadModules();
     }
 
-    findMinimumAgeByCode(code: string) {
-        const module = this.findByCode(code);
+    findMinimumAgeByCode(code: string, level: string): number {
+        const module = this.findByCodeAndLevel(code, level);
 
-        return module?.minimumAge;
+        return module?.minimumAge!;
     }
 
     findAny() {
         return this.module[Math.floor(Math.random() * this.module.length)]
     }
 
-    findByCode(code: string): Module | undefined {
-        return this.module.find((module) => module.code === code);
+    findByCodeAndLevel(code: string, level: string): Module {
+        const module = this.module.find((module) => module.code === code && module.level === level);
+
+        if (!module) throw new Error(`Modulo ${code} com level ${level} não encontrado!`);
+
+        return module;
     }
 
 
