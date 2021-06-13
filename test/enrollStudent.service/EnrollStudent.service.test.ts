@@ -70,15 +70,13 @@ test("Não deve matricular aluno abaixo da idade mínima", () => {
 });
 
 test("Não deve matricular aluno fora da capacidade da turma", () => {
+    const anyModule = getModuleWithClassroom();
     getValideStudents().forEach((student) => {
-        const anyModule = getModuleWithClassroom();
         const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
         enrollStudentService.execute(enrollmentRequest);
     })
 
     const student = new Student("Ana Carol", "339.605.820-80", new Date(1995, 11, 26));
-
-    const anyModule = getModuleWithClassroom();
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level, anyModule.code, CLASSROOM.code);
 
     expect(() => enrollStudentService.execute(enrollmentRequest))

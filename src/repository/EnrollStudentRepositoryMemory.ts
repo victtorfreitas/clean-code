@@ -1,8 +1,8 @@
-import StudentRepository from "./StudentRepository";
+import EnrollStudentRepository from "./EnrollStudentRepository";
 import EnrollStudent from "../model/EnrollStudent";
 import DataBase from "./dataMemory/DataBase";
 
-export default class EnrollStudentRepositoryMemory implements StudentRepository {
+export default class EnrollStudentRepositoryMemory implements EnrollStudentRepository {
 
     persist(enrollmentStudent: EnrollStudent) {
         DataBase.data.enrollStudents.push(enrollmentStudent);
@@ -14,5 +14,12 @@ export default class EnrollStudentRepositoryMemory implements StudentRepository 
 
     getNextSequence(): string {
         return (DataBase.data.enrollStudents.length + 1).toString().padStart(4, "0");
+    }
+
+    countBy(code: string, level: string, module: string): number {
+        return DataBase.data.enrollStudents.filter(((enrollStudent: EnrollStudent) =>
+            enrollStudent.classe === code &&
+            enrollStudent.level === level &&
+            enrollStudent.module === module)).length;
     }
 }

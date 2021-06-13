@@ -4,7 +4,7 @@ import DataBase from "./dataMemory/DataBase";
 
 export default class ClassroomRepositoryMemory implements ClassroomRepository {
 
-    findByCode(code: string): Classroom {
+    findBy(code: string): Classroom {
         const classroom = DataBase.data.classrooms.find((classRoom: Classroom) => classRoom.code === code);
 
         if (!classroom) throw new Error(`Classe ${code} não encontrada!`);
@@ -12,7 +12,10 @@ export default class ClassroomRepositoryMemory implements ClassroomRepository {
         return classroom;
     }
 
-    findCapacityByCode(code: string): number {
-        return 0;
+    findCapacityBy(code: string, level: string, module: string): number {
+        return DataBase.data.classrooms.find((classroom: Classroom) =>
+            classroom.code == code &&
+            classroom.level == level &&
+            classroom.module == module).capacity;
     }
 }

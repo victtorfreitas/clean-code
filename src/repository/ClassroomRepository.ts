@@ -1,7 +1,7 @@
 import Classroom from "../model/Classroom";
 
 export default interface ClassroomRepository {
-    findByCode(code: string): Classroom;
+    findBy(code: string): Classroom;
 
-    findCapacityByCode(code: string): number;
+    findCapacityBy(code: string, level: string, module: string): number;
 }
