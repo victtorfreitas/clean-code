@@ -91,7 +91,17 @@ test("Não deve matricular depois do fim das aulas", ()=>{
 
     expect(() => enrollStudentService.execute(enrollmentRequest))
         .toThrow(new Error("Não deve matricular depois do fim das aulas"))
-})
+});
+
+test("Não deve matricular depois de 25% do início das aulas", ()=>{
+    const student = new Student("Ana Clara", "027.297.121-94", new Date(1995, 11, 26));
+    const module = getModuleWithClassroomStarted();
+
+    const enrollmentRequest = new EnrollmentRequest(student, module.level, module.code, "C");
+
+    expect(() => enrollStudentService.execute(enrollmentRequest))
+        .toThrow(new Error("Não deve matricular depois de 25% do início das aulas"))
+});
 
 
 const getValideStudents = (): Student[] => {
@@ -105,6 +115,10 @@ const getModuleWithClassroom = (): Module => {
     return moduleRepository.findByCodeAndLevel("1","EM");
 }
 const getModuleWithClassroomFinished = (): Module => {
+    return moduleRepository.findByCodeAndLevel("3","EM");
+}
+
+const getModuleWithClassroomStarted = (): Module => {
     return moduleRepository.findByCodeAndLevel("3","EM");
 }
 

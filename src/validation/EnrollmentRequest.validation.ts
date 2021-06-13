@@ -19,6 +19,7 @@ export default class EnrollmentRequestValidation {
     execute(enrollRequest: EnrollStudent) {
         const student = enrollRequest.student;
         this.validateClassroomNotFineshed(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
+        this.validateClassroomStarted(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
         this.validateMinAge(student.birthDate, enrollRequest.module, enrollRequest.level);
         this.validateCapacity(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
     }
@@ -44,7 +45,23 @@ export default class EnrollmentRequestValidation {
         const classroom = this.classroomRepositoryMemory.findBy(classe, level, module);
         const dataAtual = new Date().getTime();
 
-        if (dataAtual> classroom.endDate.getTime())
+        if (dataAtual > classroom.endDate.getTime())
             throw new Error("Não deve matricular depois do fim das aulas");
+    }
+
+    private validateClassroomStarted(classe: string, module: string, level: string) {
+        const classroom = this.classroomRepositoryMemory.findBy(classe, level, module);
+        const dataAtual = new Date();
+
+        const everyDayOfTheRange = DateUtil.getCalculateDateOfRange(classroom.startDate, classroom.endDate);
+        const everyDayUntilToday = DateUtil.getCalculateDateOfRange(classroom.startDate, dataAtual);
+
+        const percentageOfDaysLost = (100 * everyDayUntilToday) / everyDayOfTheRange;
+        const daysLatePercentageLimit = 25;
+
+        if (percentageOfDaysLost > daysLatePercentageLimit) {
+            throw new Error("Não deve matricular depois de 25% do início das aulas")
+
+        }
     }
 }

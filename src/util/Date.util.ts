@@ -11,4 +11,10 @@ export default class DateUtil {
 
         return age;
     }
+
+    static getCalculateDateOfRange(startDate: Date, finisheDate: Date): number {
+        let Difference_In_Time = finisheDate.getTime() - startDate.getTime();
+
+        return Difference_In_Time / (1000 * 3600 * 24);
+    }
 }
