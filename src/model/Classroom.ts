@@ -3,4 +3,6 @@ export default class Classroom {
     module!: string;
     code!: string;
     capacity!: number;
+    startDate!: Date;
+    endDate!: Date;
 }

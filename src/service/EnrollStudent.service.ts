@@ -18,7 +18,6 @@ export default class EnrollStudentService {
 
     execute(enrollmentRequest: EnrollmentRequest): string {
         const enrollStudent = new EnrollStudent(enrollmentRequest);
-
         this.studentValidation.execute(enrollmentRequest.student);
         this.enrollmentRequestValidation.execute(enrollStudent);
         this.enroll(enrollStudent);

@@ -4,8 +4,12 @@ import DataBase from "./dataMemory/DataBase";
 
 export default class ClassroomRepositoryMemory implements ClassroomRepository {
 
-    findBy(code: string): Classroom {
-        const classroom = DataBase.data.classrooms.find((classRoom: Classroom) => classRoom.code === code);
+    findBy(code: string, level: string, module: string): Classroom {
+        const classroom = DataBase.data.classrooms.find((classRoom: Classroom) =>
+            classRoom.code === code &&
+            classRoom.module === module &&
+            classRoom.level === level
+        );
 
         if (!classroom) throw new Error(`Classe ${code} não encontrada!`);
 

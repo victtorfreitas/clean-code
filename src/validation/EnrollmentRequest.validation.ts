@@ -18,6 +18,7 @@ export default class EnrollmentRequestValidation {
 
     execute(enrollRequest: EnrollStudent) {
         const student = enrollRequest.student;
+        this.validateClassroomNotFineshed(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
         this.validateMinAge(student.birthDate, enrollRequest.module, enrollRequest.level);
         this.validateCapacity(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
     }
@@ -36,6 +37,14 @@ export default class EnrollmentRequestValidation {
         const capacityClassroomCurrent = this.enrollStudentRepositoryMemory.countBy(code, level, module);
 
         if (capacityClassroomTotal == capacityClassroomCurrent)
-            throw new Error("Não deve matricular aluno fora da capacidade da turma")
+            throw new Error("Não deve matricular aluno fora da capacidade da turma");
+    }
+
+    private validateClassroomNotFineshed(classe: string, module: string, level: string) {
+        const classroom = this.classroomRepositoryMemory.findBy(classe, level, module);
+        const dataAtual = new Date().getTime();
+
+        if (dataAtual> classroom.endDate.getTime())
+            throw new Error("Não deve matricular depois do fim das aulas");
     }
 }

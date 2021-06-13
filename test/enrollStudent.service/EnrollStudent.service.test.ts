@@ -83,6 +83,17 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
         .toThrow(new Error("Não deve matricular aluno fora da capacidade da turma"))
 });
 
+test("Não deve matricular depois do fim das aulas", ()=>{
+    const student = new Student("Ana Clara", "027.297.121-94", new Date(1995, 11, 26));
+    const module = getModuleWithClassroomFinished();
+
+    const enrollmentRequest = new EnrollmentRequest(student, module.level, module.code, "B");
+
+    expect(() => enrollStudentService.execute(enrollmentRequest))
+        .toThrow(new Error("Não deve matricular depois do fim das aulas"))
+})
+
+
 const getValideStudents = (): Student[] => {
     return [
         new Student("Ana Claudia", "027.297.121-94", new Date(1995, 11, 26)),
@@ -92,6 +103,9 @@ const getValideStudents = (): Student[] => {
 
 const getModuleWithClassroom = (): Module => {
     return moduleRepository.findByCodeAndLevel("1","EM");
+}
+const getModuleWithClassroomFinished = (): Module => {
+    return moduleRepository.findByCodeAndLevel("3","EM");
 }
 
 const getSequenceNumber = () => {
