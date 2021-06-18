@@ -5,11 +5,17 @@ export default class EnrollmentRequest {
     level: string;
     module: string;
     classe: string;
+    installments: number;
+    issueDate: Date;
 
-    constructor(student: Student, level: string, module: string, clasz: string) {
+    constructor(student: Student, level: string,
+                module: string, classroom: string,
+                installments: number, issueDate: Date) {
         this.student = student;
         this.level = level;
         this.module = module;
-        this.classe = clasz;
+        this.classe = classroom;
+        this.installments = installments;
+        this.issueDate = issueDate;
     }
 }

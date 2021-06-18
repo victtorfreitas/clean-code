@@ -9,7 +9,6 @@ export default class EnrollmentRequestValidation {
     private classroomRepositoryMemory: ClassroomRepositoryMemory;
     private enrollStudentRepositoryMemory: EnrollStudentRepositoryMemory;
 
-
     constructor() {
         this.moduleRepository = new ModuleRepositoryMemory();
         this.classroomRepositoryMemory = new ClassroomRepositoryMemory();
@@ -18,10 +17,10 @@ export default class EnrollmentRequestValidation {
 
     execute(enrollRequest: EnrollStudent) {
         const student = enrollRequest.student;
-        this.validateClassroomNotFineshed(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
-        this.validateClassroomStarted(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
-        this.validateMinAge(student.birthDate, enrollRequest.module, enrollRequest.level);
-        this.validateCapacity(enrollRequest.classe, enrollRequest.module, enrollRequest.level);
+        this.validateClassroomNotFineshed(enrollRequest.classe.code, enrollRequest.module.code, enrollRequest.level);
+        this.validateClassroomStarted(enrollRequest.classe.code, enrollRequest.module.code, enrollRequest.level);
+        this.validateMinAge(student.birthDate, enrollRequest.module.code, enrollRequest.level);
+        this.validateCapacity(enrollRequest.classe.code, enrollRequest.module.code, enrollRequest.level);
     }
 
     private validateMinAge(birthDate: Date, moduleCode: string, levelCode: string) {

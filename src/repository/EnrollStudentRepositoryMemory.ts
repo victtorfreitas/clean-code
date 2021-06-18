@@ -18,8 +18,8 @@ export default class EnrollStudentRepositoryMemory implements EnrollStudentRepos
 
     countBy(code: string, level: string, module: string): number {
         return DataBase.data.enrollStudents.filter(((enrollStudent: EnrollStudent) =>
-            enrollStudent.classe === code &&
+            enrollStudent.classe.code === code &&
             enrollStudent.level === level &&
-            enrollStudent.module === module)).length;
+            enrollStudent.module.code === module)).length;
     }
 }
