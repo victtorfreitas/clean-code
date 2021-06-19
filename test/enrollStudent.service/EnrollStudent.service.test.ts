@@ -1,19 +1,17 @@
 import EnrollStudentService from "../../src/service/EnrollStudent.service";
 import Student from "../../src/model/Student";
-import {data} from "../../src/Data";
 import ModuleRepositoryMemory from "../../src/repository/ModuleRepositoryMemory";
 import Module from "../../src/model/Module";
 import EnrollmentRequest from "../../src/dto/EnrollmentRequest";
 import DataBase from "../../src/repository/dataMemory/DataBase";
-
-const CLASSROOM = data.classes[0];
+import RepositoryMemoryFactory from "../../src/repository/factory/RepositoryMemoryFactory";
 
 const moduleRepository = new ModuleRepositoryMemory();
 let enrollStudentService: EnrollStudentService;
 
 beforeEach(() => {
     DataBase.resetDataBase();
-    enrollStudentService = new EnrollStudentService();
+    enrollStudentService = new EnrollStudentService(new RepositoryMemoryFactory());
 })
 
 test("Não deve matricular sem um nome de estudante válido", () => {
@@ -21,7 +19,7 @@ test("Não deve matricular sem um nome de estudante válido", () => {
         const anyModule = getModuleWithClassroom();
 
         const enrollmentRequest = new EnrollmentRequest(student, anyModule.level,
-            anyModule.code, CLASSROOM.code, 10, new Date());
+            anyModule.code, "A", 10, new Date());
 
         expect(() => enrollStudentService.execute(enrollmentRequest))
             .toThrow(new Error("Nome do estudante invalido!"));
@@ -33,7 +31,7 @@ test("Não deve matricular sem um cpf de estudante válido", () => {
     const anyModule = getModuleWithClassroom();
 
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level,
-        anyModule.code, CLASSROOM.code, 10, new Date());
+        anyModule.code, "A", 10, new Date());
 
     expect(() => enrollStudentService.execute(enrollmentRequest))
         .toThrow(new Error("Cpf do estudante invalido!"));
@@ -43,7 +41,7 @@ test("Não deve matricular um aluno duplicado", () => {
     const student = new Student("Ana Clara", "027.297.121-94", new Date(1995, 11, 26));
     const anyModule = getModuleWithClassroom();
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level,
-        anyModule.code, CLASSROOM.code, 10, new Date());
+        anyModule.code, "A", 10, new Date());
 
     enrollStudentService.execute(enrollmentRequest);
     expect(() => enrollStudentService.execute(enrollmentRequest))
@@ -55,7 +53,7 @@ test("Deve gerar o código de matrícula", () => {
     const module = getModuleWithClassroom();
 
     const enrollmentRequest = new EnrollmentRequest(student, module.level,
-        module.code, CLASSROOM.code, 10, new Date());
+        module.code, "A", 10, new Date());
 
     const enrollStudent = enrollStudentService.execute(enrollmentRequest);
     const expectEnrollNumber = `2021${module.level}${module.code}A0001`;
@@ -68,7 +66,7 @@ test("Não deve matricular aluno abaixo da idade mínima", () => {
     const anyModule = getModuleWithClassroom();
 
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level,
-        anyModule.code, CLASSROOM.code, 10, new Date());
+        anyModule.code, "A", 10, new Date());
 
     expect(() => enrollStudentService.execute(enrollmentRequest))
         .toThrow(new Error("Não deve matricular aluno abaixo da idade mínima"))
@@ -78,13 +76,13 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
     const anyModule = getModuleWithClassroom();
     getValideStudents().forEach((student) => {
         const enrollmentRequest = new EnrollmentRequest(student, anyModule.level,
-            anyModule.code, CLASSROOM.code, 10, new Date());
+            anyModule.code, "A", 10, new Date());
         enrollStudentService.execute(enrollmentRequest);
     })
 
     const student = new Student("Ana Carol", "339.605.820-80", new Date(1995, 11, 26));
     const enrollmentRequest = new EnrollmentRequest(student, anyModule.level,
-        anyModule.code, CLASSROOM.code, 10, new Date());
+        anyModule.code, "A", 10, new Date());
 
     expect(() => enrollStudentService.execute(enrollmentRequest))
         .toThrow(new Error("Não deve matricular aluno fora da capacidade da turma"))
