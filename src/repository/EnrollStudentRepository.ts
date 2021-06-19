@@ -8,4 +8,6 @@ export default interface EnrollStudentRepository {
     getNextSequence(): string;
 
     countBy(code: string, level: string, module: string): number;
+
+    findByStudentEnrollNumber(enrollNumber: string): EnrollStudent;
 }

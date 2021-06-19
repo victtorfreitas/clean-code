@@ -11,7 +11,6 @@ export default class EnrollStudentBuilder {
     private _installments!: number;
     private _issueDate!: Date;
 
-
     constructor() {
     }
 

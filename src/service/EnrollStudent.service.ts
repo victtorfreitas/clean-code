@@ -1,14 +1,12 @@
-import EnrollStudentRepositoryMemory from "../repository/EnrollStudentRepositoryMemory";
 import {StudentValidation} from "../validation/Student.validation";
 import EnrollmentRequestValidation from "../validation/EnrollmentRequest.validation";
 import EnrollmentRequest from "../dto/EnrollmentRequest";
 import EnrollStudent from "../model/EnrollStudent";
-import ModuleRepositoryMemory from "../repository/ModuleRepositoryMemory";
 import ModuleRepository from "../repository/ModuleRepository";
 import EnrollStudentRepository from "../repository/EnrollStudentRepository";
 import ClassroomRepository from "../repository/ClassroomRepository";
-import ClassroomRepositoryMemory from "../repository/ClassroomRepositoryMemory";
 import EnrollStudentBuilder from "../model/builder/EnrollStudentBuilder";
+import RepositoryAbstractFactory from "../repository/factory/RepositoryAbstractFactory";
 
 export default class EnrollStudentService {
 
@@ -18,10 +16,10 @@ export default class EnrollStudentService {
     private studentValidation: StudentValidation;
     private enrollmentRequestValidation: EnrollmentRequestValidation;
 
-    constructor() {
-        this.studentRepository = new EnrollStudentRepositoryMemory();
-        this.moduleRepository = new ModuleRepositoryMemory();
-        this.classroomRepository = new ClassroomRepositoryMemory();
+    constructor(repositoryAbstractFactory: RepositoryAbstractFactory) {
+        this.studentRepository = repositoryAbstractFactory.createEnrollmentRepository();
+        this.moduleRepository = repositoryAbstractFactory.createModuleRepository()
+        this.classroomRepository = repositoryAbstractFactory.createClassroomRepository()
         this.studentValidation = new StudentValidation(this.studentRepository);
         this.enrollmentRequestValidation = new EnrollmentRequestValidation();
     }

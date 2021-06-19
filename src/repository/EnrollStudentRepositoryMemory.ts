@@ -22,4 +22,9 @@ export default class EnrollStudentRepositoryMemory implements EnrollStudentRepos
             enrollStudent.level === level &&
             enrollStudent.module.code === module)).length;
     }
+
+    findByStudentEnrollNumber(enrollNumber: string): EnrollStudent {
+        return DataBase.data.enrollStudents.find((enrollStudent: EnrollStudent) =>
+            enrollStudent.student.enrollNumber === enrollNumber);
+    }
 }
