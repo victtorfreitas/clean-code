@@ -2,6 +2,7 @@ import Student from "./Student";
 import Invoice from "./Invoice";
 import Module from "./Module";
 import Classroom from "./Classroom";
+import InvoiceEvent from "./event/InvoiceEvent";
 
 export default class EnrollStudent {
     student: Student;
@@ -48,5 +49,16 @@ export default class EnrollStudent {
             total += invoice.getBalance();
             return total;
         }, 0);
+    }
+
+    getInvoice(month: number, year: number): Invoice {
+        return this.invoices.find(invoice => invoice.month === month && invoice.year === year)!;
+    }
+
+    payInvoice(month: number, year: number, amount: number) {
+        const invoice = this.getInvoice(month, year);
+        if (!invoice) throw new Error("Fatura não encontrada!");
+        const invoiceEvent = new InvoiceEvent("Pagamento", amount);
+        invoice.addEvent(invoiceEvent);
     }
 }
