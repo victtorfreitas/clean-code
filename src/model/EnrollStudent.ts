@@ -3,6 +3,7 @@ import Invoice from "./Invoice";
 import Module from "./Module";
 import Classroom from "./Classroom";
 import InvoiceEvent from "./event/InvoiceEvent";
+import {StatusEnrollStudent} from "./enum/StatusEnrollStudent";
 
 export default class EnrollStudent {
     student: Student;
@@ -12,6 +13,7 @@ export default class EnrollStudent {
     installments: number;
     invoices!: Invoice[];
     issueDate: Date;
+    status: StatusEnrollStudent;
 
 
     constructor(student: Student, level: string,
@@ -24,6 +26,7 @@ export default class EnrollStudent {
         this.installments = installments;
         this.issueDate = issueDate;
         this.invoices = [];
+        this.status = StatusEnrollStudent.REGISTERED;
     }
 
     public generetedEnrollNumber = (sequence: string): string => {

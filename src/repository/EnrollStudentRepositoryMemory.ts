@@ -1,6 +1,7 @@
 import EnrollStudentRepository from "./EnrollStudentRepository";
 import EnrollStudent from "../model/EnrollStudent";
 import DataBase from "./dataMemory/DataBase";
+import {StatusEnrollStudent} from "../model/enum/StatusEnrollStudent";
 
 export default class EnrollStudentRepositoryMemory implements EnrollStudentRepository {
 
@@ -26,5 +27,10 @@ export default class EnrollStudentRepositoryMemory implements EnrollStudentRepos
     findByStudentEnrollNumber(enrollNumber: string): EnrollStudent {
         return DataBase.data.enrollStudents.find((enrollStudent: EnrollStudent) =>
             enrollStudent.student.enrollNumber === enrollNumber);
+    }
+
+    changeStatus(enrollNumber: string, status: StatusEnrollStudent) {
+        const enrollStudent = this.findByStudentEnrollNumber(enrollNumber);
+        enrollStudent.status = status;
     }
 }
